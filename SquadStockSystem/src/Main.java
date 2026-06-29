@@ -6,7 +6,10 @@ public class Main {
     public static void main(String[] args) {
 
         Scanner scanner = new Scanner(System.in);
-        SistemaGestionStock sistema = new SistemaGestionStock();
+
+        ProductoDAO productoDAO = new ProductoDAO();
+        MovimientoDAO movimientoDAO = new MovimientoDAO();
+        CategoriaDAO categoriaDAO = new CategoriaDAO();
 
         int opcion = 0;
 
@@ -28,39 +31,31 @@ public class Main {
 
                 switch (opcion) {
                     case 1:
-                        registrarProducto(scanner, sistema);
+                        registrarProducto(scanner, productoDAO, categoriaDAO);
                         break;
-
                     case 2:
-                        sistema.listarProductos();
+                        productoDAO.listarProductos();
                         break;
-
                     case 3:
                         System.out.print("Ingrese nombre o parte del nombre del producto: ");
                         String nombreBusqueda = scanner.nextLine();
-                        sistema.buscarProductoPorNombre(nombreBusqueda);
+                        productoDAO.buscarProductoPorNombre(nombreBusqueda);
                         break;
-
                     case 4:
-                        sistema.ordenarProductosPorPrecio();
+                        productoDAO.ordenarProductosPorPrecio();
                         break;
-
                     case 5:
-                        registrarIngreso(scanner, sistema);
+                        registrarIngreso(scanner, movimientoDAO);
                         break;
-
                     case 6:
-                        registrarEgreso(scanner, sistema);
+                        registrarEgreso(scanner, movimientoDAO);
                         break;
-
                     case 7:
-                        sistema.listarMovimientos();
+                        movimientoDAO.listarMovimientos();
                         break;
-
                     case 8:
                         System.out.println("Saliendo del sistema...");
                         break;
-
                     default:
                         System.out.println("Opción inválida. Intente nuevamente.");
                 }
@@ -79,14 +74,12 @@ public class Main {
         scanner.close();
     }
 
-    private static void registrarProducto(Scanner scanner, SistemaGestionStock sistema) {
-
+    private static void registrarProducto(Scanner scanner, ProductoDAO productoDAO, CategoriaDAO categoriaDAO) {
         System.out.println("\n--- Registrar producto ---");
-
         System.out.print("Nombre: ");
         String nombre = scanner.nextLine();
 
-        sistema.listarCategorias();
+        categoriaDAO.listarCategorias();
 
         System.out.print("ID categoría: ");
         int idCategoria = scanner.nextInt();
@@ -105,13 +98,11 @@ public class Main {
         int stockInicial = scanner.nextInt();
         scanner.nextLine();
 
-        sistema.registrarProducto(nombre, idCategoria, talle, color, precio, stockInicial);
+        productoDAO.registrarProducto(nombre, idCategoria, talle, color, precio, stockInicial);
     }
 
-    private static void registrarIngreso(Scanner scanner, SistemaGestionStock sistema) {
-
+    private static void registrarIngreso(Scanner scanner, MovimientoDAO movimientoDAO) {
         System.out.println("\n--- Registrar ingreso de stock ---");
-
         System.out.print("ID producto: ");
         int idProducto = scanner.nextInt();
 
@@ -119,13 +110,11 @@ public class Main {
         int cantidad = scanner.nextInt();
         scanner.nextLine();
 
-        sistema.registrarIngresoStock(idProducto, cantidad);
+        movimientoDAO.registrarIngreso(idProducto, cantidad);
     }
 
-    private static void registrarEgreso(Scanner scanner, SistemaGestionStock sistema) {
-
+    private static void registrarEgreso(Scanner scanner, MovimientoDAO movimientoDAO) {
         System.out.println("\n--- Registrar egreso de stock ---");
-
         System.out.print("ID producto: ");
         int idProducto = scanner.nextInt();
 
@@ -133,6 +122,6 @@ public class Main {
         int cantidad = scanner.nextInt();
         scanner.nextLine();
 
-        sistema.registrarEgresoStock(idProducto, cantidad);
+        movimientoDAO.registrarEgreso(idProducto, cantidad);
     }
 }
